@@ -59,7 +59,7 @@ public class ImdbTuiTest {
 
 		// in case of illegal value(not int / not in range) the method recurs
 		try {
-			int choice = newUserNum();
+			int choice = Integer.parseInt(newUserInput());
 			if (choice < 0 || choice > 6) {
 				throw (new IllegalArgumentException());
 			} else {
@@ -79,13 +79,13 @@ public class ImdbTuiTest {
 		System.out.println();
 		System.out.println("*****Add Movie Menu*****");
 		System.out.println("Enter movie name");
-		name = newUserName();
+		name = newUserInput();
 
 		// Generating actor Set
 		System.out.println("Enter actoers name's one by one (9 to stop):");
 		boolean flag = true;
 		while (flag) {
-			String actor = newUserName();
+			String actor = newUserInput();
 			if (!actor.equals("9")) {
 				actors.add(actor);
 			} else {
@@ -104,12 +104,13 @@ public class ImdbTuiTest {
 
 	// Takes a movie name and actor name from user input
 	private static void addActorMenu() {
+		System.out.println();
 		System.out.println("*******Add Actor Menu*******");
 		System.out.println("Enter movie name:");
 		try {
-			Movie movie = imdb.getMovies().get(newUserName());
+			Movie movie = imdb.getMovies().get(newUserInput());
 			System.out.println("Enter actor name:");
-			movie.addActor(newUserName());
+			movie.addActor(newUserInput());
 			System.out.println("Actor successfully added");
 		} catch (IllegalArgumentException | NullPointerException e) {
 			if (e instanceof IllegalArgumentException) {
@@ -124,6 +125,7 @@ public class ImdbTuiTest {
 
 	// Print all movie by alphabet order
 	private static void allMoviesMenu() {
+		System.out.println();
 		System.out.println("*********All Movie*********");
 		List<Movie> movieList = new ArrayList<>(imdb.getAll());
 		Collections.sort(movieList);
@@ -138,7 +140,7 @@ public class ImdbTuiTest {
 		System.out.println("*******Top Movie Menu*******");
 		System.out.println("Enter a number between 1 - " + imdb.getAll().size());
 		try {
-			for (Movie movie : imdb.getTop(newUserNum())) {
+			for (Movie movie : imdb.getTop(Integer.parseInt(newUserInput()))) {
 				System.out.println(movie);
 			}
 		} catch (IllegalArgumentException | InputMismatchException e) {
@@ -148,9 +150,10 @@ public class ImdbTuiTest {
 
 	// Takes movie name from user and prints it's details
 	private static void getMovieMenu() {
+		System.out.println();
 		System.out.println("*******Get Movie Menu*******");
 		System.out.println("Enter movie name:");
-		String name = newUserName();
+		String name = newUserInput();
 		if (imdb.getMovies().get(name) != null) {
 			System.out.println(imdb.getMovies().get(name));
 		} else {
@@ -166,10 +169,10 @@ public class ImdbTuiTest {
 		System.out.println();
 		System.out.println("*******Vote Menu*******");
 		System.out.println("Select movie to vote for: (Movie name)");
-		name = newUserName();
+		name = newUserInput();
 		System.out.println("Enter your vote: (0-10)");
 		try {
-			imdb.vote(name, newUserNum());
+			imdb.vote(name, Integer.parseInt(newUserInput()));
 			System.out.println("Vote accepted");
 		} catch (NullPointerException | InputMismatchException | IllegalArgumentException e) {
 			if (e instanceof NullPointerException) {
@@ -183,16 +186,10 @@ public class ImdbTuiTest {
 	}
 
 	// Get's String from user
-	private static String newUserName() {
+	private static String newUserInput() {
 		System.out.print("->");
 		Scanner sc = new Scanner(System.in);
 		return sc.nextLine();
 	}
 
-	// Get's Int from user
-	private static int newUserNum() {
-		System.out.print("->");
-		Scanner sc = new Scanner(System.in);
-		return sc.nextInt();
-	}
 }
